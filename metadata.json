@@ -1,0 +1,6 @@
+{
+  "name": "World Mart",
+  "description": "Building a connected multi-vendor marketplace connecting businesses, sellers, and customers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
