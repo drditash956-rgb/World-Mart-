@@ -28,7 +28,8 @@ import com.example.ui.viewmodel.PublicPage
 fun PublicHomeScreen(
     heroHeadline: String,
     heroSubtext: String,
-    onNavigate: (PublicPage) -> Unit
+    onNavigate: (PublicPage) -> Unit,
+    onOpenDownloadShareDialog: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -176,6 +177,26 @@ fun PublicHomeScreen(
                             Icon(imageVector = Icons.Default.GroupAdd, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(4.dp))
                             Text("Join Our Team", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                        }
+                    }
+
+                    // Download & Share App Banner Button
+                    Button(
+                        onClick = onOpenDownloadShareDialog,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .height(50.dp)
+                            .testTag("hero_download_share_app_btn"),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0066FF)),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(imageVector = Icons.Default.GetApp, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("📲 Download / Share App with Friends", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                 }

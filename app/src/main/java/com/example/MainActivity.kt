@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.model.UserRole
 import com.example.ui.admin.*
 import com.example.ui.components.AuthDialog
+import com.example.ui.components.DownloadShareAppDialog
 import com.example.ui.components.StaffProfileDialog
 import com.example.ui.components.WorldMartAppBar
 import com.example.ui.opening.WorldMartOpeningFlow
@@ -99,6 +100,7 @@ fun WorldMartApp(viewModel: WorldMartViewModel) {
 
     var showAuthDialog by remember { mutableStateOf(false) }
     var showOpeningFlow by remember { mutableStateOf(true) }
+    var showDownloadShareDialog by remember { mutableStateOf(false) }
 
     // Handle back button
     BackHandler(enabled = drawerState.isOpen || (isAdminMode && currentAdminTab != AdminTab.DASHBOARD) || (!isAdminMode && currentPublicPage != PublicPage.HOME)) {
@@ -387,6 +389,30 @@ fun WorldMartApp(viewModel: WorldMartViewModel) {
                         }
                         Icon(Icons.Default.ChevronRight, contentDescription = null, tint = SlateTextMuted, modifier = Modifier.size(16.dp))
                     }
+
+                    // Download & Share App Drawer Button
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFF0066FF),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp)
+                            .clickable {
+                                coroutineScope.launch { drawerState.close() }
+                                showDownloadShareDialog = true
+                            }
+                            .testTag("drawer_download_share_btn")
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(Icons.Default.GetApp, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("📲 Download / Share App", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        }
+                    }
                 }
             }
         }
@@ -399,7 +425,8 @@ fun WorldMartApp(viewModel: WorldMartViewModel) {
                     currentUserRole = currentUserRole,
                     onToggleMode = { viewModel.switchToAdminMode(it) },
                     onRoleChange = { viewModel.switchUserRole(it) },
-                    onOpenNavDrawer = { coroutineScope.launch { drawerState.open() } }
+                    onOpenNavDrawer = { coroutineScope.launch { drawerState.open() } },
+                    onOpenDownloadShareDialog = { showDownloadShareDialog = true }
                 )
             },
             snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -567,7 +594,8 @@ fun WorldMartApp(viewModel: WorldMartViewModel) {
                         PublicPage.HOME -> PublicHomeScreen(
                             heroHeadline = heroHeadline,
                             heroSubtext = heroSubtext,
-                            onNavigate = { viewModel.navigateToPublicPage(it) }
+                            onNavigate = { viewModel.navigateToPublicPage(it) },
+                            onOpenDownloadShareDialog = { showDownloadShareDialog = true }
                         )
                         PublicPage.ABOUT -> PublicAboutScreen()
                         PublicPage.VISION_MISSION -> PublicVisionMissionScreen()
@@ -999,6 +1027,13 @@ fun WorldMartApp(viewModel: WorldMartViewModel) {
                         onQuickSwitchRole = {
                             viewModel.switchUserRole(it)
                         }
+                    )
+                }
+
+                // Download & Share App Dialog
+                if (showDownloadShareDialog) {
+                    DownloadShareAppDialog(
+                        onDismiss = { showDownloadShareDialog = false }
                     )
                 }
 

@@ -28,7 +28,8 @@ fun WorldMartAppBar(
     currentUserRole: UserRole,
     onToggleMode: (Boolean) -> Unit,
     onRoleChange: (UserRole) -> Unit,
-    onOpenNavDrawer: () -> Unit
+    onOpenNavDrawer: () -> Unit,
+    onOpenDownloadShareDialog: () -> Unit = {}
 ) {
     var showRoleMenu by remember { mutableStateOf(false) }
 
@@ -115,6 +116,23 @@ fun WorldMartAppBar(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    // Download & Share App Button Icon
+                    IconButton(
+                        onClick = onOpenDownloadShareDialog,
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF0066FF))
+                            .testTag("appbar_download_share_btn")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.GetApp,
+                            contentDescription = "Download & Share App",
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+
                     // Portal Mode Switcher Pill
                     Surface(
                         shape = RoundedCornerShape(20.dp),
